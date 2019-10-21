@@ -1,22 +1,14 @@
 {
-  "name": "sdcs-git-leaderboard",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SanDiegoCodeSchool/sdcs-git-leaderboard.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/SanDiegoCodeSchool/sdcs-git-leaderboard/issues"
-  },
-  "homepage": "https://github.com/SanDiegoCodeSchool/sdcs-git-leaderboard#readme",
-  "dependencies": {
-    "express": "^4.17.1"
-  }
+    "name": "sdcs-git-leaderboard",
+    "version": "0.1.0",
+    "scripts": {
+        "start": "node server",
+        "test": "mocha test --exit"
+    },
+    "dependencies": {
+        "dotenv": "^8.1.0",
+        "express": "^4.15.3",
+        "node-static": "^0.7.9",
+        "octokat": "^0.10.0"
+    }
 }
