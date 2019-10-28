@@ -8,6 +8,7 @@
     "dependencies": {
         "dotenv": "^8.1.0",
         "express": "^4.15.3",
+        "node-fetch": "^2.6.0",
         "node-static": "^0.7.9",
         "octokat": "^0.10.0"
     }
