@@ -1,21 +1,44 @@
-require('dotenv').config();
-
+const fetch = require('node-fetch');
 const express = require('express');
-
+const githubData = require('./data');
 const app = express();
-
 app.use(express.static('public'));
 
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-const GITHUB_EMAIL = process.env.GITHUB_EMAIL;
-const GITHUB_USER = process.env.GITHUB_USER;
+var myUsers = ["darrell3001", "MikeMurrayDev"];
 
-const Github = require('octokat')({ token: GITHUB_TOKEN })
+let cache = {
+};
 
-let cache = {}
+app.get('/data', function(req, res){
+  var today = new Date();
+  var dd = String(today.getDate()).padStart(2, '0');
+  var mm = String(today.getMonth() + 1).padStart(2, '0');
+  var yyyy = today.getFullYear();
+  var myData = []; 
+  today = mm + '/' + dd + '/' + yyyy;
+  
+  myUsers.forEach(user => {
+    var myKey = user + today;
+    
+    if (!cache[myKey]) {
+      fetch(`https://api.github.com/users/${user}/events`)
+      
+      .then(response => 
+        response.json())
+      .then(data => {
+        cache[myKey] = data;
+        myData[user] = cache[myKey] 
+      })
+      .catch(error => console.error(error));              
+      // do something
+    } else {
+      myData[user] = cache[myKey] 
 
-app.get('/api', (req, res) => {
-// add some logic to return the data for all users
+    }
+
+  });
+  console.log('Key thing: ', cache);
+
 });
 
 module.exports = app;
