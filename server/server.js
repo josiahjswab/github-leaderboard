@@ -1,43 +1,57 @@
-const fetch = require('node-fetch');
+const axios = require('axios');
 const express = require('express');
 const githubData = require('./data');
+const moment = require('moment');
+const _ = require('lodash');
+
 const app = express();
 app.use(express.static('public'));
 
 var myUsers = ["darrell3001", "MikeMurrayDev"];
+var today = moment().format();
+var lastSevenDays = moment().subtract(7, 'days').calendar();
 
-let cache = {
-};
+let cache = {};
+
+var myData = []; 
+
+function calculatePoints (commitNumber) {
+  switch(commitNumber) {
+    case 0:
+      return 0;
+    case 1:
+      return 5;
+    case 2:
+      return 7;
+    default:
+      return commitNumber + 5
+  }
+}
 
 app.get('/data', function(req, res){
-  var today = new Date();
-  var dd = String(today.getDate()).padStart(2, '0');
-  var mm = String(today.getMonth() + 1).padStart(2, '0');
-  var yyyy = today.getFullYear();
-  var myData = []; 
-  today = mm + '/' + dd + '/' + yyyy;
   
   myUsers.forEach(user => {
-    var myKey = user + today;
-    
+    var myKey = user + ' ' + lastSevenDays   
     if (!cache[myKey]) {
-      fetch(`https://api.github.com/users/${user}/events`)
-      
-      .then(response => 
-        response.json())
-      .then(data => {
-        cache[myKey] = data;
-        myData[user] = cache[myKey] 
+      axios.get(`https://api.github.com/users/${user}/events`)      
+      .then(response => {
+        response.data.map((data)=>{
+          let commitCount = 0; 
+          if(!!data.payload.commits) {
+            commitCount = data.payload.commits.length;
+          }
+          console.log('commit count: ', commitCount);
+        })
+        //cache[myKey] = response;
+        //console.log('Key thing: ', cache);
+        // myData[user] = cache[myKey] 
       })
       .catch(error => console.error(error));              
-      // do something
     } else {
-      myData[user] = cache[myKey] 
-
+      // myData[user] = cache[myKey];
     }
-
   });
-  console.log('Key thing: ', cache);
+  
 
 });
 
