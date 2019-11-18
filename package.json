@@ -1,15 +1,14 @@
 {
-    "name": "sdcs-git-leaderboard",
-    "version": "0.1.0",
-    "scripts": {
-        "start": "node server",
-        "test": "mocha test --exit"
-    },
-    "dependencies": {
-        "axios": "^0.19.0",
-        "dotenv": "^8.1.0",
-        "express": "^4.15.3",
-        "lodash": "^4.17.15",
-        "moment": "^2.24.0"
-    }
+  "name": "sdcs-git-leaderboard",
+  "version": "0.1.0",
+  "scripts": {
+    "start": "node server",
+    "test": "mocha test --exit"
+  },
+  "dependencies": {
+    "axios": "^0.19.0",
+    "dotenv": "^8.1.0",
+    "express": "^4.15.3",
+    "moment": "^2.24.0"
+  }
 }

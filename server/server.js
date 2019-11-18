@@ -1,20 +1,16 @@
-const axios = require('axios');
 const express = require('express');
 const githubData = require('./data');
-const moment = require('moment');
-const _ = require('lodash');
-
-const NUMBER_OF_DAYS = 7;
+const axios = require('axios');
+var moment = require('moment');
 
 const app = express();
 app.use(express.static('public'));
 
 var myUsers = ["darrell3001", "MikeMurrayDev"];
 var today = moment().format();
-var lastSevenDays = moment().subtract(7, 'days').calendar();
+var seventhDayFromToday = moment().subtract(7, 'days').calendar();
 
 let cache = {};
-
 var myData = [];
 
 function calculatePoints(commitNumber) {
@@ -65,10 +61,54 @@ app.get('/data', function(req, res){
       // return the data from the cache return as a new promise
     }
   });
-
-  Promise.all(results)
-   .then(data => res.send(data))
-   .catch(err => console.log(err));
 });
+
+function mockData() {
+  return new Promise((resolve, reject) => {
+    resolve({
+      data: [
+        {
+          "id": "10723766875",
+          "type": "PushEvent",
+          "actor": {
+            "id": 40833437,
+            "login": "darrell3001",
+            "display_login": "darrell3001",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/darrell3001",
+            "avatar_url": "https://avatars.githubusercontent.com/u/40833437?"
+          },
+          "repo": {
+            "id": 210208145,
+            "name": "darrell3001/sdcs-codechallenges",
+            "url": "https://api.github.com/repos/darrell3001/sdcs-codechallenges"
+          },
+          "payload": {
+            "push_id": 4200409593,
+            "size": 1,
+            "distinct_size": 1,
+            "ref": "refs/heads/master",
+            "head": "9b308f743626aaf9e6a6e27618044da881e28257",
+            "before": "6ac402edeb04ff5acb827737829d99c7567c3faf",
+            "commits": [
+              {
+                "sha": "9b308f743626aaf9e6a6e27618044da881e28257",
+                "author": {
+                  "email": "darrell3001@gmail.com",
+                  "name": "Darrell Sturdivant"
+                },
+                "message": "fix code error spotted by Albert",
+                "distinct": true,
+                "url": "https://api.github.com/repos/darrell3001/sdcs-codechallenges/commits/9b308f743626aaf9e6a6e27618044da881e28257"
+              }
+            ]
+          },
+          "public": true,
+          "created_at": "2019-10-27T20:59:42Z"
+        }
+      ]
+    });
+  });
+}
 
 module.exports = app;
