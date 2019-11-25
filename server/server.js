@@ -12,6 +12,7 @@ var seventhDayFromToday = moment().subtract(7, 'days').calendar();
 
 let cache = {};
 var myData = [];
+var queue = [];
 
 function calculatePoints(commitNumber) {
   switch(commitNumber) {
@@ -27,7 +28,8 @@ function calculatePoints(commitNumber) {
 }
 
 function getUsersCommits(username) {
-  return axios.get(`https://api.github.com/users/${username}/events`)
+  // return axios.get(`https://api.github.com/users/${username}/events`)
+  return mockData()
     .then(response => {
       response.data.map(data => {
         let commitCount = 0;
@@ -36,16 +38,14 @@ function getUsersCommits(username) {
       })
     })
     .catch(error => console.error(error));
-}
+ }
 
-function isDataMissing(cache, username, numberOfDaysToCheck) {
-  for (let i = 0; i < numberOfDaysToCheck; i++) {
-    var myKey = username + moment().subtract(i, 'day').format("MM-DD-YYYY");
-    if (!cache[myKey]) {
-      return true;
-    }
-  }
-  return false;
+function isDataMissing(cache, myUsers) {
+  let yesterday = moment().subtract(1, 'day').format("MM-DD-YYYY");
+
+  myUsers.map((username)=> {
+    if (!cache[username + yesterday]) queue.push(username);        
+  });
 }
 
 app.get('/data', function(req, res){
