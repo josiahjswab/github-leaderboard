@@ -2,19 +2,60 @@
   width: 100%;
 }
 
+.center {
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 #header-wrap {
   width: 100%;
   text-align: center;
+  vertical-align: middle;
+  margin-bottom: 10px;
 }
 
 img {
- width: 100px;
- margin: 10px auto 10px auto;
+  width: 100px;
+  margin: 10px auto 10px auto;
 }
 
-#header{
-  font-size:2em;
+#header {
+  font-size: 2em;
   margin-bottom: 10px;
+}
+
+#user-input {
+  height: 20px;
+  width: 180px;
+  vertical-align: middle;
+  font-size: 15px;
+  padding-left: 5px;
+}
+
+#add-button {
+  color: white;
+  background-color: green;
+  font-size: 15px;
+  border-radius: 2px;
+  height: 28px;
+  width: 75px;
+  margin-left: 10px;
+  vertical-align: middle;
+}
+
+#delete-button {
+  color: #8a1b1b;
+  background-color: white;
+  border: 1px solid #8a1b1b;
+  box-sizing: border-box;
+  font-size: 15px;
+  border-radius: 2px;
+  height: 28px;
+  width: 75px;
+  margin-left: 10px;
+  vertical-align: middle;
 }
 
 table {
@@ -32,12 +73,14 @@ thead, td {
   border: 1px solid black;
 }
 
-tr:nth-child(even){background-color: #f2f2f2}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
 
- thead {
-   background-color:#8a1b1b;
-   color: white;
- }
+thead {
+  background-color: #8a1b1b;
+  color: white;
+}
 
 td:nth-child(1), th:nth-child(1) {
   text-align: center;

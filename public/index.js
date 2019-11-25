@@ -1,6 +1,6 @@
 var mockData = [
     {
-        username: 'firstuser',
+        username: 'firstUser',
         points: 5012
     },
     {
@@ -12,6 +12,15 @@ var mockData = [
         points: 1736
     }
 ]
+
+var competitors = {};
+
+function addUser() {
+   var userInput = document.getElementById("user-input").value;
+   console.log(userInput)
+   userInput.appendTo("competitors");
+   console.log(competitors)  
+};
 
 function populateTable(){
     mockData.sort( (a, b) => b.points-a.points);
