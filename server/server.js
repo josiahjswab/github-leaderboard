@@ -6,12 +6,11 @@ var moment = require('moment');
 const app = express();
 app.use(express.static('public'));
 
-var myUsers = ["darrell3001", "MikeMurrayDev"];
+var myUsers = ["darrell3001", "MikeMurrayDev", "michaelerobertsjr"];
 var today = moment().format();
 var seventhDayFromToday = moment().subtract(7, 'days').calendar();
 
 let cache = {};
-var myData = [];
 var queue = [];
 
 function calculatePoints(commitNumber) {
@@ -43,24 +42,37 @@ function getUsersCommits(username) {
 function isDataMissing(cache, myUsers) {
   let yesterday = moment().subtract(1, 'day').format("MM-DD-YYYY");
 
-  myUsers.map((username)=> {
-    if (!cache[username + yesterday]) queue.push(username);        
+  var results = myUsers.map((username)=> {
+    if (!cache[username + yesterday]) {
+      // TODO: before we push in the queue, make sure it doesn't exist already there.
+      queue.push(username);
+    }
+    return `Checked user ${username} on ${yesterday} for commits.`
   });
+  return results;
 }
 
-app.get('/data', function(req, res){
-  const results = myUsers.forEach(username => {
-    if (isDataMissing(cache, username, NUMBER_OF_DAYS)) {
-      // warm up the cache for this user
-      return getUsersCommits(username)
-        .then(points => { // we get back an array of objects with scores and dates
-          // TODO: for each object push it into the cache
-        })
-        .catch(errorGettingUsers => console.log(errorGettingUsers));
-    } else {
-      // return the data from the cache return as a new promise
-    }
-  });
+function processQueue(queue) {
+  // TODO: Should process each user in the queue and make a request to GitHub to get history
+}
+
+function fetchDataFromCache(cache) {
+  // TODO: Iterate over keys in cache and calculate points for each user
+  /**
+   * {
+   *    merobertsjr01-01-2019: 22,
+   *    royhobbs01-01-2019: 2
+   * }
+   *
+   */
+
+}
+
+app.get('/data', function(req, res) {
+  var response = [isDataMissing(cache, myUsers),queue];
+  //processQueue(queue);
+  //fetchDataFromCache(cache);
+  res.json(response);
 });
 
 function mockData() {
