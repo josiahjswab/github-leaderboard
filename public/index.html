@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link rel="shortcut icon" href="#"/>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -16,14 +17,14 @@
         <label htmlFor="user-input">Github Username</label>
         <input type="text" id="user-input" placeholder="i.e. RoyHobbs"/>
         <button id="delete-button">Delete</button>
-        <button id="add-button" onclick="addUser">Add</button>
+       <button id="add-button" onclick="addUser()">Add</button>
       </div>
       <table>
         <thead>
           <tr>
-            <th>Rank</th>
+            <th class="rank-padding">Rank</th>
             <th>User Name</th>
-            <th>Score</th>
+            <th class="score-padding">Score</th>
           </tr>
         </thead>
         <tbody></tbody>

@@ -2,6 +2,14 @@
   width: 100%;
 }
 
+.rank-padding {
+  padding-left: 10px;
+}
+
+.score-padding {
+  padding-right: 10px;
+}
+
 .center {
   width: 100%;
   max-width: 600px;
