@@ -1,11 +1,13 @@
 // TODO: this is a work in progress, should be able to add new users to the list to track
 function addUser() {
-    var userInput = document.getElementById("user-input").value;
-    userInput.appendTo("competitors");
+    var usernameInput = {
+        "username": document.getElementById("user-input").value
+    };
+    $.post("/postUser", usernameInput);
 };
 
 function populateTable() {
-    $.get("http://localhost:3000/getUserScores", function (data) {
+    $.get("/getUserScores", function (data) {
         data.sort((a, b) => b.points - a.points);
         var sortedData = data.map((student, i) =>
             `<tr>
