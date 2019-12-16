@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <link rel="shortcut icon" href="#"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -16,13 +17,13 @@
         <div id="header">SDCS Git Leaderboard</div>
         <label htmlFor="user-input">Github Username</label>
         <input type="text" id="user-input" placeholder="i.e. RoyHobbs"/>
-        <button id="delete-button">Delete</button>
+        <button id="delete-button" onclick="deleteUser()">Delete</button>
        <button id="add-button" onclick="addUser()">Add</button>
       </div>
       <table>
         <thead>
           <tr>
-            <th class="rank-padding">Rank</th>
+            <th class="rank-padding" id='rankButton' onClick="reverseRank()"><i class="fas fa-sort"></i> Rank</th>
             <th>User Name</th>
             <th class="score-padding">Score</th>
           </tr>

@@ -2,10 +2,6 @@
   width: 100%;
 }
 
-.rank-padding {
-  padding-left: 10px;
-}
-
 .score-padding {
   padding-right: 10px;
 }
@@ -74,7 +70,7 @@ table {
 }
 
 thead, td {
-  padding: 8px;
+  padding: 0px 5px 0px 5px;
 }
 
 thead, td {
@@ -92,7 +88,7 @@ thead {
 
 td:nth-child(1), th:nth-child(1) {
   text-align: center;
-  width: 10%;
+  width: 20%;
 }
 
 th:nth-child(2), td:nth-child(2) {
@@ -100,11 +96,20 @@ th:nth-child(2), td:nth-child(2) {
 }
 
 td:nth-child(3) {
-  text-align: right;
+  text-align: center;
   width: 10%;
 }
 
 th:nth-child(3) {
   text-align: center;
   width: 10%;
+}
+
+#rankButton {
+  cursor: pointer;
+  padding-right: 16px;
+}
+
+#rankButton:hover {
+  color: lightgray;
 }
