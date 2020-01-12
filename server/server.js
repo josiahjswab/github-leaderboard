@@ -9,8 +9,8 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded());
-
-let myUsers = ['josiahjswab', 'Albertove951', 'Puffshere'];
+// , 'Albertove951', 'Puffshere'
+let myUsers = [];
 let yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD');
 let cache = [];
 let queue = [];
@@ -44,23 +44,25 @@ function calculatePoints(perDay) {
 function addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue) {
   for(var j = 0; j < myUsers.length; j++) {
     if(cache.length >= 1) {
+      let count = 0;
       for(var i = 0; i < cache.length; i++) {
-        if (!cache[i].id == (myUsers[j] + yesterday)) {
-          queue.push(myUsers[j]);
-          console.log('--- USER NOT FOUND IN CACHE PUSHED TO QUEUE');
-        } else {
-          console.log('--- YOU LOADED USER FROM CACHE');
-        };
+        let user = myUsers[j] + yesterday;
+        if (cache[i].id === user) {
+          console.log(`--- ${cache[i].id} EXISTS IN CACHE`);
+          count++
+        } 
+      }
+      if (count === 0) {
+        queue.push(myUsers[j]);
       }
     } else {
       queue.push(myUsers[j]);
-      console.log('--- CACHE WAS EMPTY PUSHING ALL USERS TO QUEUE');
+      console.log(`--- CACHE WAS EMPTY PUSHING ${myUsers[j]} TO QUEUE`);
     }
   }
   if(queue.length >= 1) {
     processQueue(queue);
   }
-
 }
 
 function processQueue(qArray) {
@@ -113,8 +115,12 @@ function processQueue(qArray) {
 }
 
 app.get('/getUserScores', function(req, res) {
-  addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue)
-  setTimeout(function(){ res.status(200).json(cache); }, 3000);
+  if(myUsers.length === 0 ) {
+    res.status(200).json([{username: 'Add User', points: '0'}]);
+  } else {
+    addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue)
+    setTimeout(function(){ res.status(200).json(cache); }, 3000);
+  }
 });
 
 app.post('/postUser', function(req, res) {
@@ -123,7 +129,19 @@ app.post('/postUser', function(req, res) {
 });
 
 app.delete('/deleteUsers/:userName', function(req, res) {
-  delete cache[req.params.userName];
+  if(cache.length >= 1) {
+    for(var i = 0; i < cache.length; i++) {
+      if(cache[i].username === req.params.userName) {
+        cache.splice(i, 1)
+      }
+      if(myUsers[i] === req.params.userName) {
+        myUsers.splice(i, 1);
+        console.log(req.params.userName + ' deleted from myuser array:' + myUsers)
+      }
+    }
+  } else {
+    console.log('--- NOTHING TO DELETE');
+  }
   res.json(req.params.userName);
 })
 
