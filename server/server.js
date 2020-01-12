@@ -10,14 +10,14 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded());
 
-let myUsers = ["josiahjswab"];
-let yesterday = moment().subtract(1, 'day').format("YYYY-MM-DD");
-let cache = {};
+let myUsers = ['josiahjswab', 'Albertove951', 'Puffshere'];
+let yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD');
+let cache = [];
 let queue = [];
 let sevenDaysArray = [];
 
 for(let i = 1; i < 8; i++) {
-  sevenDaysArray.push(moment().subtract(i, 'day').format("YYYY-MM-DD"))
+  sevenDaysArray.push(moment().subtract(i, 'day').format('YYYY-MM-DD'))
 };
 
 function calculatePoints(perDay) {
@@ -41,21 +41,32 @@ function calculatePoints(perDay) {
   return totalPoints;
 }
         
-function addUsersNeedingUpdateToTheQueue(cache, myUsers) {
-  return myUsers.map((username)=> {
-    if (!cache[username + yesterday]) {
-      queue.push(username);
+function addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue) {
+  for(var j = 0; j < myUsers.length; j++) {
+    if(cache.length >= 1) {
+      for(var i = 0; i < cache.length; i++) {
+        if (!cache[i].id == (myUsers[j] + yesterday)) {
+          queue.push(myUsers[j]);
+          console.log('--- USER NOT FOUND IN CACHE PUSHED TO QUEUE');
+        } else {
+          console.log('--- YOU LOADED USER FROM CACHE');
+        };
+      }
     } else {
-      console.log('you hit cache instead of que')
-    };
-  });
+      queue.push(myUsers[j]);
+      console.log('--- CACHE WAS EMPTY PUSHING ALL USERS TO QUEUE');
+    }
+  }
+  if(queue.length >= 1) {
+    processQueue(queue);
+  }
+
 }
 
 function processQueue(qArray) {
-  // TODO: Should process each user in the queue and make a request to GitHub to get history
   qArray.forEach((username) => {
     axios.get(`https://api.github.com/users/${username}/events`, {headers: {
-      "Authorization" : `token ${process.env.GITHUB_OAUTH}`
+      'Authorization' : `token ${process.env.GITHUB_OAUTH}`
     }})
     .then(res => {
       let perDay = [0,0,0,0,0,0,0];
@@ -88,53 +99,28 @@ function processQueue(qArray) {
             null;
         }
       });
-      cache[username + yesterday] = calculatePoints(perDay);
+      let profile = {
+        id: username + yesterday,
+        username: username,
+        points: calculatePoints(perDay)
+      };
+      cache.push(profile);
+      console.log(cache);
     })
-    .then(() => console.log(cache))
-    .then(() => console.log(queue))
     .then(() => queue = [])
-    .then(() => console.log(queue))
     .catch(error => console.error(error));
   });
-
-}
-
-function fetchDataFromCache(cache) {
-  // TODO: Iterate over keys in cache and calculate points for each user
-  
 }
 
 app.get('/getUserScores', function(req, res) {
-  addUsersNeedingUpdateToTheQueue(cache, myUsers,)
-  if(queue.length <= 1) {
-    processQueue(queue);
-  }
-  fetchDataFromCache(cache);
-  res.status(200).json(cache);
+  addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue)
+  setTimeout(function(){ res.status(200).json(cache); }, 3000);
 });
 
 app.post('/postUser', function(req, res) {
   myUsers.push(req.body.username);
   return res.json(req.body);
 });
-
-// app.get('/getUserScores', function(req, res) {
-//   let frontEndMockData = [
-//     {
-//         "username": "firstUser",
-//         "points": 5012
-//     },
-//     {
-//         "username": "secondUser",
-//         "points": 9182
-//     },
-//     {
-//         "username": "thirdUser",
-//         "points": 1736
-//     }
-// ]
-//   res.json(frontEndMockData);
-// });
 
 app.delete('/deleteUsers/:userName', function(req, res) {
   delete cache[req.params.userName];

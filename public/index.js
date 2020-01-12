@@ -7,17 +7,18 @@ function addUser() {
     $.post("/postUser", usernameInput);
 };
 
+//TODO: receive and parse data from backend here
 function populateTable() {
     $.get("/getUserScores", function (allScores) {
-        // allScores.sort((a, b) => b.points - a.points);
-        console.log(allScores)
-        var sortedData = (
+        allScores.sort((a, b) => b.points - a.points);
+        var sortedData = allScores.map((student, i) =>
             `<tr>
-                <td>1</td>
-                <td></td>
-                <td>${allScores}</td>
-            </tr>`);
+            <td>${i + 1}</td>
+            <td>${student.username}</td>
+            <td>${student.points}</td>
+        </tr>`);
         $('tbody').append(sortedData);
+        console.log(allScores)
     });
 }
 
