@@ -9,13 +9,14 @@ function addUser() {
 
 function populateTable() {
     $.get("/getUserScores", function (allScores) {
-        allScores.sort((a, b) => b.points - a.points);
-        var sortedData = allScores.map((student, i) =>
+        // allScores.sort((a, b) => b.points - a.points);
+        console.log(allScores)
+        var sortedData = (
             `<tr>
-            <td>${i + 1}</td>
-            <td>${student.username}</td>
-            <td>${student.points}</td>
-        </tr>`);
+                <td>1</td>
+                <td></td>
+                <td>${allScores}</td>
+            </tr>`);
         $('tbody').append(sortedData);
     });
 }
