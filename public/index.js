@@ -8,13 +8,20 @@ function addUser() {
 };
 
 //TODO: receive and parse data from backend here
+let borderRadius = {
+
+}
+
 function populateTable() {
     $.get("/getUserScores", function (allScores) {
         allScores.sort((a, b) => b.points - a.points);
         var sortedData = allScores.map((student, i) =>
             `<tr>
             <td>${i + 1}</td>
-            <td>${student.username}</td>
+            <td>
+                <img style="border-radius: 50%;" src="${student.avatar}" width="50px" height="50px"/>
+                ${student.username}
+            </td>
             <td>${student.points}</td>
         </tr>`);
         $('tbody').append(sortedData);

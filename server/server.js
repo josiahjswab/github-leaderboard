@@ -101,10 +101,12 @@ function processQueue(qArray) {
             null;
         }
       });
+      console.log(res.data[0].actor.avatar_url);
       let profile = {
         id: username + yesterday,
         username: username,
-        points: calculatePoints(perDay)
+        points: calculatePoints(perDay),
+        avatar: res.data[0].actor.avatar_url
       };
       cache.push(profile);
       console.log(cache);
@@ -116,7 +118,11 @@ function processQueue(qArray) {
 
 app.get('/getUserScores', function(req, res) {
   if(myUsers.length === 0 ) {
-    res.status(200).json([{username: 'Add User', points: '0'}]);
+    res.status(200).json([{
+      username: 'Add User', 
+      points: '0',
+      avatar: 'https://avatars3.githubusercontent.com/u/54999121?v=4'
+    }]);
   } else {
     addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue)
     setTimeout(function(){ res.status(200).json(cache); }, 3000);
@@ -125,6 +131,7 @@ app.get('/getUserScores', function(req, res) {
 
 app.post('/postUser', function(req, res) {
   myUsers.push(req.body.username);
+  req.url = '/getUserScores'
   return res.json(req.body);
 });
 
