@@ -8,7 +8,6 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded());
-// USERS TO TEST APP: 'Albertove951', 'Puffshere', 'josiahjswab', 'Darrell3001'
 let myUsers = ['Albertove951', 'Puffshere', 'josiahjswab', 'Darrell3001'];
 let yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD');
 let cache = [];
@@ -54,9 +53,8 @@ async function checkUserDataDate(cache, myUsers) {
         }
       }        
       if (count === 0) queue.push(myUsers[j]);
+    }
   }
-  }
-
   if(queue.length >= 1) {
     return true
     
