@@ -9,8 +9,8 @@ const app = express();
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded());
-// , 'Albertove951', 'Puffshere'
-let myUsers = [];
+// USERS TO TEST APP: 'Albertove951', 'Puffshere', 'josiahjswab', 'Darrell3001'
+let myUsers = ['Albertove951', 'Puffshere', 'josiahjswab', 'Darrell3001'];
 let yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD');
 let cache = [];
 let queue = [];
@@ -41,7 +41,7 @@ function calculatePoints(perDay) {
   return totalPoints;
 }
         
-function addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue) {
+async function checkUserDataDate(cache, myUsers) {
   for(var j = 0; j < myUsers.length; j++) {
     if(cache.length >= 1) {
       let count = 0;
@@ -61,58 +61,69 @@ function addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue) {
     }
   }
   if(queue.length >= 1) {
-    processQueue(queue);
+    return true
+    
+  } else {
+    return false
   }
 }
 
 function processQueue(qArray) {
-  qArray.forEach((username) => {
-    axios.get(`https://api.github.com/users/${username}/events`, {headers: {
-      'Authorization' : `token ${process.env.GITHUB_OAUTH}`
-    }})
-    .then(res => {
-      let perDay = [0,0,0,0,0,0,0];
-      res.data.map(gitData => {
-        let commitCount = 0;
-        let commitDate = gitData.created_at.substring(0, 10);
-        switch(commitDate) {
-          case sevenDaysArray[0]:
-            perDay[0]++
-            break;
-          case sevenDaysArray[1]:
-            perDay[1]++
-            break;
-          case sevenDaysArray[2]:
-            perDay[2]++
-            break;
-          case sevenDaysArray[3]:
-            perDay[3]++
-            break;
-          case sevenDaysArray[4]:
-            perDay[4]++
-            break;
-          case sevenDaysArray[5]:
-            perDay[5]++
-            break;
-          case sevenDaysArray[6]:
-            perDay[6]++
-            break;
-          default:
-            null;
-        }
-      });
-      console.log(res.data[0].actor.avatar_url);
-      let profile = {
-        id: username + yesterday,
-        username: username,
-        points: calculatePoints(perDay),
-        avatar: res.data[0].actor.avatar_url
-      };
-      cache.push(profile);
-      console.log(cache);
-    })
-    .then(() => queue = [])
-    .catch(error => console.error(error));
+  return new Promise((resolve, reject) => {
+    let count = 0;
+    qArray.forEach((username, index, array) => {
+      axios.get(`https://api.github.com/users/${username}/events`, {headers: {
+        'Authorization' : `token ${process.env.GITHUB_OAUTH}`
+      }})
+      .then(res => cacheData(res, username))
+      .then(() => count === array.length - 1 ? resolve(cache) : count++ )
+      .then(() => queue = [])
+      .catch(error => console.error(error));
+
+    });
+    
+  });
+}
+
+function cacheData(res, username) {
+  return new Promise((resolve, reject) => {
+    let perDay = [0,0,0,0,0,0,0];
+    res.data.map((gitData) => {
+      let commitDate = gitData.created_at.substring(0, 10);
+      switch(commitDate) {
+        case sevenDaysArray[0]:
+          perDay[0]++
+          break;
+        case sevenDaysArray[1]:
+          perDay[1]++
+          break;
+        case sevenDaysArray[2]:
+          perDay[2]++
+          break;
+        case sevenDaysArray[3]:
+          perDay[3]++
+          break;
+        case sevenDaysArray[4]:
+          perDay[4]++
+          break;
+        case sevenDaysArray[5]:
+          perDay[5]++
+          break;
+        case sevenDaysArray[6]:
+          perDay[6]++
+          break;
+        default:
+          null;
+      }
+    });
+    let profile = {
+      id: username + yesterday,
+      username: username,
+      points: calculatePoints(perDay),
+      avatar: res.data[0].actor.avatar_url
+    };
+    cache.push(profile);
+    resolve(cache);
   });
 }
 
@@ -124,8 +135,11 @@ app.get('/getUserScores', function(req, res) {
       avatar: 'https://avatars3.githubusercontent.com/u/54999121?v=4'
     }]);
   } else {
-    addUsersNeedingUpdateToTheQueue(cache, myUsers, processQueue)
-    setTimeout(function(){ res.status(200).json(cache); }, 3000);
+    checkUserDataDate(cache, myUsers)
+      .then((result) => result ? processQueue(queue) : cache)
+      // .then((data) => console.log('DATA:' +  JSON.stringify(data) ))
+      .then((data) => res.status(200).json(data) )
+      .catch((err) => console.log(err));
   }
 });
 

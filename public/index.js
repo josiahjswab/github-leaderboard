@@ -1,16 +1,9 @@
-// TODO: this is a work in progress, should be able to add new users to the list to track
-
 function addUser() {
     var usernameInput = {
         "username": document.getElementById("user-input").value
     };
     $.post("/postUser", usernameInput);
 };
-
-//TODO: receive and parse data from backend here
-let borderRadius = {
-
-}
 
 function populateTable() {
     $.get("/getUserScores", function (allScores) {
