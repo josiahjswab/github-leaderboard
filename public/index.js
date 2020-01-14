@@ -3,13 +3,14 @@ function addUser() {
         "username": document.getElementById("user-input").value
     };
     $.post("/postUser", usernameInput);
+    location.reload();
 };
 
 function populateTable() {
     $.get("/getUserScores", function (allScores) {
         allScores.sort((a, b) => b.points - a.points);
         var sortedData = allScores.map((student, i) =>
-            `<tr>
+        `<tr>
             <td>${i + 1}</td>
             <td>
                 <img style="border-radius: 50%;" src="${student.avatar}" width="50px" height="50px"/>
@@ -31,6 +32,7 @@ function deleteUser() {
             alert("You Have Successfully Deleted User: " + result);
         }
     });
+    location.reload();
 }
 
 function reverseRank() {
