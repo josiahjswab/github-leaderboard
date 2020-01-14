@@ -1,5 +1,4 @@
 const express = require('express');
-const githubData = require('./data');
 const axios = require('axios');
 const moment = require('moment');
 require('dotenv').config();
@@ -10,7 +9,7 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded());
 // USERS TO TEST APP: 'Albertove951', 'Puffshere', 'josiahjswab', 'Darrell3001'
-let myUsers = ['Albertove951', 'Puffshere', 'Darrell3001'];
+let myUsers = ['Albertove951', 'Puffshere', 'josiahjswab', 'Darrell3001'];
 let yesterday = moment().subtract(1, 'day').format('YYYY-MM-DD');
 let cache = [];
 let queue = [];
@@ -71,7 +70,7 @@ function processQueue(qArray) {
     let count = 0;
     qArray.forEach((username, index, array) => {
       axios.get(`https://api.github.com/users/${username}/events`, {headers: {
-        'Authorization' : `token ${process.env.GITHUB_OAUTH}`
+        'Authorization' : `token ${process.env.GITHUB_TOKEN}`
       }})
       .then(res => cacheData(res, username))
       .then(() => count === array.length - 1 ? resolve(cache) : count++ )

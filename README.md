@@ -6,9 +6,7 @@ Track the top committers over the course of the last week.
 
 Create a `.env` file with the following:
 ```
-GITHUB_TOKEN=97C50EB1F54C2CA50A020DEBE0CC16B953D9097B
-GITHUB_USER=jane.doe
-GITHUB_EMAIL=jane.doe@gmail.com
+GITHUB_TOKEN=ff21e07f52cad05f6be46660fffcb2e14de2b958
 ```
 
 To install dependencies:
