@@ -17,6 +17,7 @@ function populateTable() {
                 ${student.username}
             </td>
             <td>${student.points}</td>
+            <td>Hello</td>
         </tr>`);
         $('tbody').append(sortedData);
         console.log(allScores)
