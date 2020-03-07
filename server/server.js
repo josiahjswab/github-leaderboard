@@ -139,8 +139,9 @@ app.get('/getUserScores', function(req, res) {
 });
 
 app.post('/postUser', function(req, res) {
+  console.log(req.body)
   //TODO: 1) do not allow duplicates into the myUsers array 2) update page after post request is succesful.
-  myUsers.push(req.body.username);
+  myUsers.push(req.body.gitHubUserName);
   req.url = '/getUserScores'
   return res.json(req.body);
 });
@@ -154,7 +155,7 @@ app.delete('/deleteUsers/:userName', function(req, res) {
       }
       if(myUsers[i] === req.params.userName) {
         myUsers.splice(i, 1);
-        console.log(req.params.userName + ' deleted from myuser array:' + myUsers)
+        console.log(req.params.userName + ' deleted from myUser array:' + myUsers)
       }
     }
   }
