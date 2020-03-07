@@ -1,4 +1,4 @@
-# SDCS Git-leaderboard
+# Git-leaderboard
 
 Track the top committers over the course of the last week.
 
