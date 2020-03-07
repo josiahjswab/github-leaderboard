@@ -1,3 +1,9 @@
+import React from 'react'
+import { render } from 'react-dom'
+import App from './App'
+
+render(<App/>, document.getElementById('root'));
+
 function addUser() {
     var usernameInput = {
         "username": document.getElementById("user-input").value
@@ -6,23 +12,22 @@ function addUser() {
     location.reload();
 };
 
-function populateTable() {
-    $.get("/getUserScores", function (allScores) {
-        allScores.sort((a, b) => b.points - a.points);
-        var sortedData = allScores.map((student, i) =>
-        `<tr>
-            <td>${i + 1}</td>
-            <td>
-                <img style="border-radius: 50%;" src="${student.avatar}" width="50px" height="50px"/>
-                ${student.username}
-            </td>
-            <td>${student.points}</td>
-            <td>Hello</td>
-        </tr>`);
-        $('tbody').append(sortedData);
-        console.log(allScores)
-    });
-}
+// function populateTable() {
+//     $.get("/getUserScores", function (allScores) {
+//         allScores.sort((a, b) => b.points - a.points);
+//         var sortedData = allScores.map((student, i) =>
+//         `<tr>
+//             <td>${i + 1}</td>
+//             <td>
+//                 <img style="border-radius: 50%;" src="${student.avatar}" width="50px" height="50px"/>
+//                 ${student.username}
+//             </td>
+//             <td>${student.points}</td>
+//         </tr>`);
+//         $('tbody').append(sortedData);
+//         console.log(allScores)
+//     });
+// }
 
 function deleteUser() {
     let github_id = document.getElementById("user-input").value;
@@ -41,4 +46,4 @@ function reverseRank() {
     tbody.html($('tr',tbody).get().reverse());
 }
 
-populateTable();
+// populateTable();
